@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Patient Login</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Poppins", sans-serif;
+        }
+
+        body {
+            background: #f2f6fb;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .login-container {
+            width: 900px;
+            background: #fff;
+            border-radius: 20px;
+            display: flex;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            animation: fadeIn 0.6s ease;
+        }
+
+        @keyframes fadeIn {
+            from {opacity: 0; transform: translateY(20px);}
+            to   {opacity: 1; transform: translateY(0);}
+        }
+
+        /* LEFT SIDE */
+        .login-left {
+            width: 50%;
+            padding: 50px 40px;
+        }
+
+        .login-left h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #222;
+        }
+
+        .login-left p {
+            color: #666;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #333;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px;
+            border-radius: 10px;
+            border: 1.8px solid #cdd3dd;
+            font-size: 0.95rem;
+            transition: 0.3s;
+        }
+
+        input:focus {
+            border-color: #05a081;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(5, 160, 129, 0.15);
+        }
+
+        .btn-login {
+            width: 100%;
+            background: #05a081;
+            border: none;
+            padding: 14px;
+            color: #fff;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 10px;
+            margin-top: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn-login:hover {
+            background: #04856d;
+        }
+
+        .extra-links {
+            margin-top: 15px;
+            text-align: center;
+            color: #555;
+            font-size: 0.9rem;
+        }
+
+        .extra-links a {
+            color: #05a081;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .extra-links a:hover {
+            text-decoration: underline;
+        }
+
+        /* RIGHT SIDE */
+        .login-right {
+            width: 50%;
+            background: #0fb68c;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            position: relative;
+        }
+
+        .login-right img {
+            width: 90%;
+            max-width: 350px;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 830px) {
+            .login-container {
+                flex-direction: column;
+                width: 95%;
+            }
+            .login-left, .login-right {
+                width: 100%;
+            }
+            .login-right {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="login-container">
+
+        <!-- LEFT SECTION -->
+        <div class="login-left">
+            <h2>Login To Your Account!</h2>
+            <p>Access your medical details securely</p>
+
+            <form action="/patient_login" method="POST">
+
+                <div class="form-group">
+                    <label>Patient ID</label>
+                    <input 
+                        type="text" 
+                        name="patient_id" 
+                        placeholder="Enter Patient ID (e.g., P001)" 
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input 
+                        type="email" 
+                        name="email" 
+                        placeholder="Enter your email" 
+                        required
+                    >
+                </div>
+
+                <button type="submit" class="btn-login">Login</button>
+            </form>
+
+            <div class="extra-links">
+                Not Registered Yet? <a href="#">Sign-Up</a>
+            </div>
+        </div>
+
+        <!-- RIGHT SECTION (Illustration) -->
+        <div class="login-right">
+            <img src="https://img.freepik.com/premium-photo/doctor-icon-with-stethoscope-nurse-logo-medical-health-care-hospital-patient-examination_1278344-8871.jpg?semt=ais_hybrid&w=740&q=80">
+        </div>
+
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vaccination Management</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-bottom: 15px;
+            padding: 10px 20px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .content {
+            padding: 25px;
+        }
+
+        .vaccine-types {
+            background: #e8f5e9;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+        }
+
+        .vaccine-types h2 {
+            color: #11998e;
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+
+        .vaccine-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .vaccine-card {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #11998e;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .vaccine-card h3 {
+            color: #11998e;
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+
+        .vaccine-card p {
+            font-size: 13px;
+            color: #666;
+            margin: 5px 0;
+        }
+
+        .vaccine-count {
+            background: #11998e;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            display: inline-block;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .form-section {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 8px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #11998e;
+        }
+
+        .btn {
+            padding: 10px 25px;
+            border: none;
+            border-radius: 5px;
+            font-size: 15px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: #11998e;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #0d7a6f;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+            padding: 6px 12px;
+            font-size: 13px;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+            font-size: 14px;
+        }
+
+        tbody tr:hover {
+            background: #f9f9f9;
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 30px;
+            color: #999;
+        }
+
+        .alert {
+            padding: 12px 20px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-danger {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="/" class="back-btn">← Back to Home</a>
+            <h1>💉 Vaccination Management</h1>
+        </div>
+
+        <div class="content">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <div class="vaccine-types">
+                <h2>📋 Available Vaccines</h2>
+                <div class="vaccine-count">Total Types: 8</div>
+                <div class="vaccine-grid">
+                    <div class="vaccine-card">
+                        <h3>💉 COVID-19 (Covishield)</h3>
+                        <p><strong>Doses:</strong> 2 + Booster</p>
+                        <p><strong>Age Group:</strong> 18+ years</p>
+                    </div>
+                    <div class="vaccine-card">
+                        <h3>💉 COVID-19 (Covaxin)</h3>
+                        <p><strong>Doses:</strong> 2 + Booster</p>
+                        <p><strong>Age Group:</strong> 18+ years</p>
+                    </div>
+                    <div class="vaccine-card">
+                        <h3>💉 Hepatitis B</h3>
+                        <p><strong>Doses:</strong> 3 doses</p>
+                        <p><strong>Age Group:</strong> All ages</p>
+                    </div>
+                    <div class="vaccine-card">
+                        <h3>💉 MMR (Measles, Mumps, Rubella)</h3>
+                        <p><strong>Doses:</strong> 2 doses</p>
+                        <p><strong>Age Group:</strong> Children 12-15 months</p>
+                    </div>
+                    <div class="vaccine-card">
+                        <h3>💉 Polio</h3>
+                        <p><strong>Doses:</strong> 4 doses</p>
+                        <p><strong>Age Group:</strong> Children 0-5 years</p>
+                    </div>
+                    <div class="vaccine-card">
+                        <h3>💉 Typhoid</h3>
+                        <p><strong>Doses:</strong> Single dose</p>
+                        <p><strong>Age Group:</strong> 2+ years</p>
+                    </div>
+                    <div class="vaccine-card">
+                        <h3>💉 Tetanus</h3>
+                        <p><strong>Doses:</strong> Booster every 10 years</p>
+                        <p><strong>Age Group:</strong> All ages</p>
+                    </div>
+                    <div class="vaccine-card">
+                        <h3>💉 Rabies</h3>
+                        <p><strong>Doses:</strong> 3-5 doses (Post-exposure)</p>
+                        <p><strong>Age Group:</strong> All ages</p>
+                    </div>
+                </div>
+            </div>
+
+            {% if session.user_type == 'admin' %}
+            <div class="form-section">
+                <form action="{{ url_for('add_vaccination_record') }}" method="POST">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Patient ID *</label>
+                            <input type="text" name="patient_id_ref" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Patient Name *</label>
+                            <input type="text" name="patient_name" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Age *</label>
+                            <input type="number" name="age" min="0" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Vaccine Name *</label>
+                            <select name="vaccine_name" required>
+                                <option value="">Select Vaccine</option>
+                                <option value="COVID-19 (Covishield)">COVID-19 (Covishield)</option>
+                                <option value="COVID-19 (Covaxin)">COVID-19 (Covaxin)</option>
+                                <option value="Hepatitis B">Hepatitis B</option>
+                                <option value="MMR">MMR</option>
+                                <option value="Polio">Polio</option>
+                                <option value="Typhoid">Typhoid</option>
+                                <option value="Tetanus">Tetanus</option>
+                                <option value="Rabies">Rabies</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Dose Number *</label>
+                            <select name="dose_number" required>
+                                <option value="">Select Dose</option>
+                                <option value="1st Dose">1st Dose</option>
+                                <option value="2nd Dose">2nd Dose</option>
+                                <option value="Booster">Booster</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Vaccination Date *</label>
+                            <input type="date" name="vaccination_date" id="vaccineDate" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add Record</button>
+                </form>
+            </div>
+            {% else %}
+            <div class="patient-view-notice" style="background: #d1ecf1; padding: 20px; margin-bottom: 30px; border-radius: 10px; border: 2px solid #bee5eb; text-align: center;">
+                <p style="margin: 0; color: #0c5460; font-size: 16px; font-weight: 600;">
+
+            </div>
+            {% endif %}
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>S.No</th>
+                        <th>Patient ID</th>
+                        <th>Patient Name</th>
+                        <th>Age</th>
+                        <th>Vaccine</th>
+                        <th>Dose</th>
+                        <th>Date</th>
+                        {% if session.user_type == 'admin' %}
+                        <th>Actions</th>
+                        {% endif %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if records %}
+                        {% for record in records %}
+                        <tr>
+                            <td>{{ loop.index }}</td>
+                            <td>{{ record.patient_id_ref }}</td>
+                            <td>{{ record.patient_name }}</td>
+                            <td>{{ record.age }}</td>
+                            <td>{{ record.vaccine_name }}</td>
+                            <td>{{ record.dose_number }}</td>
+                            <td>{{ record.vaccination_date }}</td>
+                            {% if session.user_type == 'admin' %}
+                            <td>
+                                <a href="{{ url_for('delete_vaccination_record', id=record.vaccination_id) }}" 
+                                   class="btn btn-danger"
+                                   onclick="return confirm('Delete this vaccination record?')">Delete</a>
+                            </td>
+                            {% endif %}
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="8" class="no-data">No vaccination records yet</td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Set today's date as default
+        document.getElementById('vaccineDate').valueAsDate = new Date();
+    </script>
+</body>
+</html>
